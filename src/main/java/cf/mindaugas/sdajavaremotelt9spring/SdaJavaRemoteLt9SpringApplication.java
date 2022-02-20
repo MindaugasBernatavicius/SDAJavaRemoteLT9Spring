@@ -1,5 +1,6 @@
 package cf.mindaugas.sdajavaremotelt9spring;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -139,7 +141,7 @@ public class SdaJavaRemoteLt9SpringApplication {
 // }
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1")
 class BlogPostControllerWRepo {
     @Autowired
@@ -170,7 +172,7 @@ class BlogPostControllerWRepo {
     }
 
     @PutMapping("/blogposts/{id}")
-    public ResponseEntity<Void> createBlogPost(@PathVariable Long id, @RequestBody BlogPost blogPost) {
+    public ResponseEntity<Void> updateBlogPost(@PathVariable Long id, @RequestBody BlogPost blogPost) {
         // load
         BlogPost bpToUpdate = bpr.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -226,6 +228,7 @@ class BlogPost {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    // @JsonIgnore
     private String title;
     private String text;
 }
